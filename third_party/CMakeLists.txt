@@ -7,6 +7,8 @@ set(SHADERC_GOOGLE_TEST_DIR "${SHADERC_THIRD_PARTY_ROOT_DIR}/googletest" CACHE S
   "Location of googletest source")
 set(SHADERC_SPIRV_TOOLS_DIR "${SHADERC_THIRD_PARTY_ROOT_DIR}/spirv-tools" CACHE STRING
   "Location of spirv-tools source")
+set(SHADERC_SPIRV_HEADERS_DIR "${SHADERC_THIRD_PARTY_ROOT_DIR}/spirv-headers" CACHE STRING
+  "Location of spirv-headers source")
 set(SHADERC_GLSLANG_DIR "${SHADERC_THIRD_PARTY_ROOT_DIR}/glslang" CACHE STRING
   "Location of glslang source")
 
@@ -34,6 +36,14 @@ if(WIN32)
     # installed, undo anything glslang has done to it.
     set(CMAKE_GENERATOR_TOOLSET "${OLD_PLATFORM_TOOLSET}" CACHE STRING
       "Platform Toolset" FORCE)
+endif()
+
+if (IS_DIRECTORY ${SHADERC_SPIRV_HEADERS_DIR})
+  # point spirv-tools at spirv-headers
+  set(SPIRV-Headers_SOURCE_DIR ${SHADERC_SPIRV_HEADERS_DIR})
+else()
+  # spirv-tools is required and it depends on spirv-headers
+  message(FATAL_ERROR "SPIRV-Headers was not found - required for compilation")
 endif()
 
 if (IS_DIRECTORY ${SHADERC_SPIRV_TOOLS_DIR})
